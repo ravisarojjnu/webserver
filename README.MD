@@ -3,7 +3,7 @@
 This is a basic multithreaded HTTP web server written in Java using Maven. The server listens on the default port 8080 and provides a simple response to incoming requests.
 
 ## Prerequisites
-- Java Development Kit (JDK) installed
+- Java Development Kit (JDK) 1.8 installed
 - Maven installed
 
 ## Getting Started
@@ -17,7 +17,7 @@ cd webserver
 mvn clean package
 
 4. Run the server:
-java -jar target/basic-http-web-server.jar
+java -jar target/httpwebserver-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 
 5. The server is now running and listening on port 8080. You can access it by opening a web browser and entering `http://localhost:8080` in the address bar.
 
