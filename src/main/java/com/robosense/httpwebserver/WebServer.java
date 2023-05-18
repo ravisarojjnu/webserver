@@ -1,6 +1,8 @@
 package com.robosense.httpwebserver;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -13,6 +15,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,7 +30,7 @@ public class WebServer {
 	private static final int DEFAULT_PORT = 8080;
 	private static final int DEFAULT_NTHREAD = 5;
 
-	public static void main(String args[]) {
+	public static void main(String args[]){
 
 		Options options = new Options();
 
@@ -85,27 +88,35 @@ public class WebServer {
 			formatter.printHelp("utility-name", options);
 			System.exit(1);
 		}
-		log.info(System.getProperty("user.dir"));
+		
+		catch(Exception e) {
+			log.error(e);
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
 
 	}
 
-	void start(int port, int thread) {
+	void start(int port, int thread) throws IOException {
 
 		try {
 			ServerSocket ss = new ServerSocket(port);
 			log.info("Webserver started to listening on  port: " + port);
-//			ExecutorService exexutorService = Executors.newFixedThreadPool(thread);
-//			
-//			while(true) {
-//				
-//				exexutorService.submit(null);
-//			}
-			Socket session = ss.accept();
-			log.debug("server recived: " + session.getInputStream().toString());
+			log.info("To stop the server press ctrl+c ");
+			ExecutorService exexutorService = Executors.newFixedThreadPool(thread);
+			
+			while(true) {
+				String requestId = UUID.randomUUID().toString();
+				exexutorService.submit(new RequestHandler(ss.accept(),requestId));
+			}
+			
+			
 
 		} catch (IOException e) {
 			log.error(e);
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
