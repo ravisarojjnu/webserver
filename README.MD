@@ -1,6 +1,6 @@
 # Basic HTTP Web Server
 
-This is a basic HTTP web server written in Java using Maven. The server listens on the default port 8080 and provides a simple response to incoming requests.
+This is a basic multithreaded HTTP web server written in Java using Maven. The server listens on the default port 8080 and provides a simple response to incoming requests.
 
 ## Prerequisites
 - Java Development Kit (JDK) installed
