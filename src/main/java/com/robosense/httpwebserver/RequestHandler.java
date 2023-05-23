@@ -6,6 +6,8 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
+import com.robosense.httpwebserver.http.parser.HttpRequestParser;
+
 public class RequestHandler implements Runnable {
 	
 	private static Logger log = Logger.getLogger(RequestHandler.class);
@@ -22,14 +24,23 @@ public class RequestHandler implements Runnable {
 	@Override
 	public void run() {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			log.debug("server recived 1: " + reader.readLine()+ requestId);
-			log.debug("server recived 2: " + reader.readLine()+ requestId);
-			log.debug("server recived 3: " + reader.readLine()+ requestId);
+		
+			HttpRequestParser httpReqParser = new HttpRequestParser(socket);
+			httpReqParser.parse();
 			socket.close();
-		} catch (Exception e) {
+		}
+		catch(Exception e){
+		
+			
 			log.error("Runtime Error", e);
 		}
+		
+	}
+	
+	String getRequestType() {
+		
+		return requestId;
+		
 		
 	}
 

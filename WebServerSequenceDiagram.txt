@@ -1,0 +1,39 @@
+Web Server -> HTTP Request: handleRequest(httpRequest)
+activate HTTP Request
+HTTP Request -> Web Server: getRequestType()
+deactivate HTTP Request
+alt Static Content
+  Web Server -> Static Content Handler: handleStaticContent(httpRequest)
+  activate Static Content Handler
+  Static Content Handler -> File System: readFile(filePath)
+  activate File System
+  File System --> Static Content Handler: fileContent
+  deactivate File System
+  Static Content Handler --> Web Server: staticContentResponse
+  deactivate Static Content Handler
+  Web Server -> HTTP Response: sendResponse(staticContentResponse)
+  activate HTTP Response
+  deactivate HTTP Response
+else API Route
+  Web Server -> API Router: handleAPIRequest(httpRequest)
+  activate API Router
+  API Router -> Request Parser: parseRequest(httpRequest)
+  activate Request Parser
+  alt Valid Request
+    Request Parser --> API Router: parsedRequest
+    deactivate Request Parser
+    API Router -> API Controller: routeRequest(parsedRequest)
+    activate API Controller
+    API Controller --> API Router: response
+    deactivate API Controller
+    API Router -> HTTP Response: sendResponse(response)
+    activate HTTP Response
+    deactivate HTTP Response
+  else Invalid Request
+    Request Parser -> HTTP Response: sendErrorResponse()
+    activate HTTP Response
+    deactivate HTTP Response
+  end
+  deactivate API Router
+end
+
