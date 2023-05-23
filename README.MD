@@ -34,7 +34,7 @@ mvn clean package
 - After making changes, rebuild the project using Maven (`mvn clean package`) and run the server again.
 
 # Design: Web Server in Java
-![sequencediagram](WebServerSequenceDiagram.png)
+![sequencediagram](WebServerSequenceDiagram.jpg)
 ## 1. Architecture Overview
 The web server will follow a multi-threaded architecture, where each incoming request will be handled by a separate thread. This approach ensures concurrent processing of requests and prevents blocking of the main server thread. The server will consist of the following components:
 
