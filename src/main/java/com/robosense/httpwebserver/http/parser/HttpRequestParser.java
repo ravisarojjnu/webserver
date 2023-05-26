@@ -3,7 +3,9 @@ package com.robosense.httpwebserver.http.parser;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,13 +29,12 @@ public class HttpRequestParser {
 
 	}
 
+	public Request getRequest() {
+		return request;
+	}
+
 	public void parse() throws Exception {
-//		InputStreamReader red = new InputStreamReader(this.socket.getInputStream());
-//		int ch = red.read();
-//		while(ch!=-1) {
-//			System.out.print((char)ch);
-//			ch = red.read();
-//		}
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		String firstLine = reader.readLine();
 		if (firstLine != null) {
@@ -45,9 +46,18 @@ public class HttpRequestParser {
 
 			this.parseHeader(reader);
 			request.setPayloadBuffer(reader);
+			String remoteAddress = this.getHostInfo();
+			request.setRemoteAddress(remoteAddress);
 		} else {
-			log.debug("server recived null request: ");
+			request.setMethod(Method.UNRECOGNIZED);
+			log.error("server recived null request: ");
 		}
+	}
+	
+	private String getHostInfo() {
+		InetAddress remoteSocket = socket.getInetAddress();
+		return remoteSocket.getHostAddress();
+		
 	}
 
 	private void parseRequestLine(String firstLine) throws Exception {
@@ -85,6 +95,13 @@ public class HttpRequestParser {
 		}
 		
 		request.setHeader(header);
+		
+	}
+	
+	public String toString() {
+		
+		
+		return null;
 		
 	}
 

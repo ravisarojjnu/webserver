@@ -15,6 +15,8 @@ public class Request {
 	private Map<String,String> header;
 	private String payload;
 	private BufferedReader payloadBuffer;
+	
+	private String remoteAddress;
 	public Method getMethod() {
 		return method;
 	}
@@ -50,6 +52,12 @@ public class Request {
 	}
 	public void setPayloadBuffer(BufferedReader payloadBuffer) {
 		this.payloadBuffer = payloadBuffer;
+	}
+	public String getRemoteAddress() {
+		return remoteAddress;
+	}
+	public void setRemoteAddress(String remoteAddress) {
+		this.remoteAddress = remoteAddress;
 	}
 	
 

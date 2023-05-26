@@ -3,6 +3,7 @@ package com.robosense.httpwebserver;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,6 +15,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
+
+import com.robosense.httpwebserver.config.CommonConfig;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -60,7 +63,7 @@ public class WebServer {
 			if (port_input_val != null) {
 
 				if (!validatePort(port_input_val.intValue()))
-					throw new ParseException("port number should be in range (0,65535)");
+					throw new ParseException("port number should be in range (5000,65534)");
 				log.info("web server will listen to the port: " + port_input_val);
 
 			} else {
@@ -78,7 +81,7 @@ public class WebServer {
 				log.info("max number of Default thread webserver can create for request handling: " + DEFAULT_NTHREAD);
 				thread_count_input_val = DEFAULT_NTHREAD;
 			}
-
+            CommonConfig.read();
 			new WebServer().start(port_input_val.intValue(), thread_count_input_val.intValue());
 
 			log.info("web server dev in progress...");
@@ -99,10 +102,13 @@ public class WebServer {
 	}
 
 	void start(int port, int thread) throws IOException {
-
+		ServerSocket ss=null;
 		try {
-			ServerSocket ss = new ServerSocket(port);
-			log.info("Webserver started to listening on  port: " + port);
+			InetAddress hostAddress = InetAddress.getByName((String)CommonConfig.properties.get("server.host"));
+			 ss= new ServerSocket(port, 50,hostAddress);
+			String apiBase = (String)CommonConfig.properties.get("server.api_base");
+			String dataFolder = (String)CommonConfig.properties.get("server.data_folder");
+			log.info("Webserver started to listening on  port: " + port +" Host: "+hostAddress.getHostAddress() +", with api base: "+apiBase+" and dataFolder "+dataFolder);
 			log.info("To stop the server press ctrl+c ");
 			ExecutorService exexutorService = Executors.newFixedThreadPool(thread);
 			
@@ -118,6 +124,10 @@ public class WebServer {
 			e.printStackTrace();
 			throw e;
 		}
+		finally {
+			ss.close();
+		}
+			
 	}
 
 	static boolean validatePort(int port) {
