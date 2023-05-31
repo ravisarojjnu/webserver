@@ -1,5 +1,7 @@
 package com.robosense.httpwebserver;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Date;
 import java.util.Properties;
@@ -47,10 +49,27 @@ public class RequestHandler implements Runnable {
 					Handler handler = new ApiRequestHandler();
 				}
 			}
-			socket.close();
 		} catch (Exception e) {
-
+			Response response=new Response();
+			try {
+				
+				response.setOutputStream(socket.getOutputStream());
+				setServerError(response);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			log.error("Runtime Error", e);
+		}
+		finally{
+			
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -86,6 +105,20 @@ public class RequestHandler implements Runnable {
 		message.append("] ");
 		log.info(message);
 
+	}
+	
+	private void setServerError(Response response) throws IOException {
+		
+		OutputStream outputStream = response.getOutputStream();
+		
+		String responseStr="HTTP/1.1 500 Internal Server Error\r\n"+
+				"Content-Type: text/plain\r\n"+
+				"Content-length: 21\r\n"+
+				"\r\n"+
+				"Internal Server Error";
+		outputStream.write(responseStr.getBytes());
+		log.info(responseStr);
+		
 	}
 
 }
