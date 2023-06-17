@@ -12,7 +12,7 @@ import com.robosense.httpwebserver.config.CommonConfig;
 import com.robosense.httpwebserver.handler.ApiRequestHandler;
 import com.robosense.httpwebserver.handler.Handler;
 import com.robosense.httpwebserver.handler.StaticContentHandler;
-import com.robosense.httpwebserver.http.Method;
+import com.robosense.httpwebserver.http.HttpMethod;
 import com.robosense.httpwebserver.http.Request;
 import com.robosense.httpwebserver.http.Response;
 import com.robosense.httpwebserver.http.parser.HttpRequestParser;
@@ -38,7 +38,7 @@ public class RequestHandler implements Runnable {
 			HttpRequestParser httpReqParser = new HttpRequestParser(socket);
 			httpReqParser.parse();
 			Request request = httpReqParser.getRequest();
-			if (!request.getMethod().equals(Method.UNRECOGNIZED)) {
+			if (!request.getMethod().equals(HttpMethod.UNRECOGNIZED)) {
 				String requestType = this.getRequestType(request);
 				printRequest(request, requestType);
 				if (requestType.equals("STAIC_CONTENT")) {

@@ -1,6 +1,6 @@
 package com.robosense.httpwebserver.http;
 
-public enum Method {
+public enum HttpMethod {
 	GET("GET"), 
 	HEAD("HEAD"),
 	POST("POST"), 
@@ -12,7 +12,7 @@ public enum Method {
 	
 	private final String method;
 	
-	Method(String method){
+	HttpMethod(String method){
 		
 		this.method=method;
 		

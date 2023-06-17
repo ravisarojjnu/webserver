@@ -12,7 +12,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.robosense.httpwebserver.http.Method;
+import com.robosense.httpwebserver.http.HttpMethod;
 import com.robosense.httpwebserver.http.Request;
 import com.robosense.httpwebserver.http.exception.UnrecognizedHttpMethod;
 
@@ -41,7 +41,7 @@ public class HttpRequestParser {
 			this.parseRequestLine(firstLine);
 			log.info("Received Request: " + request.getMethod() + " " + request.getPath() + " "
 					+ request.getProtocalVersion());
-			if (request.getMethod().equals(Method.UNRECOGNIZED))
+			if (request.getMethod().equals(HttpMethod.UNRECOGNIZED))
 				throw new UnrecognizedHttpMethod("Invalid HTTP 1.1 request. Request Method is UNRECOGNIZED");
 
 			this.parseHeader(reader);
@@ -49,7 +49,7 @@ public class HttpRequestParser {
 			String remoteAddress = this.getHostInfo();
 			request.setRemoteAddress(remoteAddress);
 		} else {
-			request.setMethod(Method.UNRECOGNIZED);
+			request.setMethod(HttpMethod.UNRECOGNIZED);
 			log.error("server recived null request: ");
 		}
 	}
@@ -63,16 +63,16 @@ public class HttpRequestParser {
 	private void parseRequestLine(String firstLine) throws Exception {
 
 		String[] tokens = firstLine.split("\\s+");
-		Method method;
+		HttpMethod method;
 		if (tokens.length < 3) {
 			log.debug("Received: " + firstLine);
 			throw new UnrecognizedHttpMethod("Invalid HTTP 1.1 request");
 		}
 		try {
 
-			method = Method.valueOf(tokens[0]);
+			method = HttpMethod.valueOf(tokens[0]);
 		} catch (Exception e) {
-			method = Method.UNRECOGNIZED;
+			method = HttpMethod.UNRECOGNIZED;
 			log.error(e);
 			log.debug(firstLine);
 		}

@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class Request {
 	
-	private Method method;
+	private HttpMethod method;
 	private String path;
 	private String protocalVersion;
 	private Map<String,String> header;
@@ -17,10 +17,10 @@ public class Request {
 	private BufferedReader payloadBuffer;
 	
 	private String remoteAddress;
-	public Method getMethod() {
+	public HttpMethod getMethod() {
 		return method;
 	}
-	public void setMethod(Method method) {
+	public void setMethod(HttpMethod method) {
 		this.method = method;
 	}
 	public String getPath() {
